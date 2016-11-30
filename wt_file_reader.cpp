@@ -81,27 +81,21 @@ int WTFileReader::readBlockDesc() {
 int WTFileReader::readPage(wt_page_t *page) {
 	int bh_offset, p_offset;
 
-  std::cout << "offset: " << wt_r->c_offset << std::endl;
-  std::cout << "size: " << wt_r->f_size << std::endl;
-	if (wt_r->c_offset >= wt_r->f_size)
+  if (wt_r->c_offset >= wt_r->f_size)
 		return WT_EOF;
 
-  std::cout << "Step: 1" << std::endl;
   page->offset = wt_r->c_offset;
 	/*
 	 * Use fixed WT_PAGE_HEADER_SIZE & WT_BLOCK_HEADER_SIZE instead of computing
 	 * the size from structs in case compiler inserts padding.
 	 */
-  std::cout << "Step: 2" << std::endl;
-	memcpy(page->page_header, (static_cast<unsigned char*>(wt_r->map) + wt_r->c_offset),
+  memcpy(page->page_header, (static_cast<unsigned char*>(wt_r->map) + wt_r->c_offset),
 	       WT_PAGE_HEADER_SIZE);
- std::cout << "Step: 3" << std::endl;
-	bh_offset = wt_r->c_offset + WT_PAGE_HEADER_SIZE;
+  bh_offset = wt_r->c_offset + WT_PAGE_HEADER_SIZE;
 	memcpy(page->block_header, (static_cast<unsigned char*>(wt_r->map) + bh_offset),
 	       WT_BLOCK_HEADER_SIZE);
 
-  std::cout << "Step: 4" << std::endl;
-	if (page->page_header->recno == WT_RECNO_OOB)
+  if (page->page_header->recno == WT_RECNO_OOB)
 		p_offset = page->block_header->disk_size;
 	else
 		p_offset = WT_PAGE_SIZE;
