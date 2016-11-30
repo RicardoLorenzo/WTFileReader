@@ -92,8 +92,8 @@ int WTFileReader::readPage(wt_page_t *page) {
   memcpy(page->page_header, (static_cast<unsigned char*>(wt_r->map) + wt_r->c_offset),
 	       WT_PAGE_HEADER_SIZE);
   bh_offset = wt_r->c_offset + WT_PAGE_HEADER_SIZE;
-	memcpy(page->block_header, (static_cast<unsigned char*>(wt_r->map) + bh_offset),
-	       WT_BLOCK_HEADER_SIZE);
+	//memcpy(page->block_header, (static_cast<unsigned char*>(wt_r->map) + bh_offset),
+	//       WT_BLOCK_HEADER_SIZE);
 
   if (page->page_header->recno == WT_RECNO_OOB)
 		p_offset = page->block_header->disk_size;

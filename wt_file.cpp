@@ -8,7 +8,6 @@ WTFile::WTFile(const char* filename) {
 }
 
 void WTFile::parse() {
-  wt_page_t *page;
   int offset = file_reader->readBlockDesc();
   offset = file_reader->readPage(page);
   //printPage(page);
