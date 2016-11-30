@@ -15,15 +15,28 @@ void WTFile::parse() {
   page->page_header = page_header;
   page->block_header = block_header;
   int offset = file_reader->readBlockDesc();
-  offset = file_reader->readPage(page);
-  printPage(page);
+  while(offset != WT_EOF) {
+    offset = file_reader->readPage(page);
+    printPage(page);
+  }
 }
 
 void WTFile::printPage(wt_page_t *page) {
-  std::cout << "recno: ";
+  std::cout << "page recno: ";
   std::cout << page->page_header->recno;
-  std::cout << " csum: 0x";
+  std::cout << " mem_size: 0x";
+  std::cout << std::hex << page->page_header->mem_size;
+  std::cout << " entries: ";
+  std::cout << page->page_header->entries;
+  std::cout << " type: ";
+  std::cout << page->page_header->type;
+  std::cout << " flags: ";
+  std::cout << page->page_header->flags;
+  std::cout << std::endl;
+  std::cout << "  block csum: 0x";
   std::cout << std::hex << page->block_header->checksum;
+  std::cout << " disk_size: 0x";
+  std::cout << std::hex << page->block_header->disk_size;
   std::cout << " flags: " << page->block_header->flags;
   std::cout << std::endl;
 }
