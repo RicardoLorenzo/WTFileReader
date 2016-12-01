@@ -8,7 +8,7 @@ LIBS=-lm
 #	$(CC) -c $(LIBS) -o $@ %.cc $(CFLAGS)
 
 wtfile: clean
-	$(CC) -std=c++11 -o wtfile wt_file_reader.cpp wt_file.cpp -I. $(LIBS)
+	$(CC) ${ARGS} -std=c++11 -o wtfile wt_file_reader.cpp wt_file.cpp -I. $(LIBS)
 
 
 .PHONY: clean
