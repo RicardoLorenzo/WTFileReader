@@ -89,10 +89,10 @@ int WTFileReader::readPage(wt_page_t *page) {
 	 * Use fixed WT_PAGE_HEADER_SIZE & WT_BLOCK_HEADER_SIZE instead of computing
 	 * the size from structs in case compiler inserts padding.
 	 */
-  memcpy(page->page_header, (static_cast<unsigned char*>(wt_r->map) + wt_r->c_offset),
+  memcpy(page->page_header, (static_cast<uint8_t*>(wt_r->map) + wt_r->c_offset),
 	       WT_PAGE_HEADER_SIZE);
   bh_offset = wt_r->c_offset + WT_PAGE_HEADER_SIZE;
-	memcpy(page->block_header, (static_cast<unsigned char*>(wt_r->map) + bh_offset),
+	memcpy(page->block_header, (static_cast<uint8_t*>(wt_r->map) + bh_offset),
 	       WT_BLOCK_HEADER_SIZE);
 
   if (page->page_header->recno == WT_RECNO_OOB)

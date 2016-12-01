@@ -8,7 +8,6 @@
 #define WT_BLOCK_MINOR_VERSION  0
 #define WT_BLOCK_DESC_SIZE 16
 
-#pragma pack(push, 1)
 typedef struct wt_block_desc {
 	uint32_t magic;
 	uint16_t major_version;
@@ -16,13 +15,11 @@ typedef struct wt_block_desc {
 	uint32_t checksum;
 	uint32_t unused;
 } wt_block_desc_t;
-#pragma pack(pop)
 
 /* WT Page Header */
 #define WT_PAGE_HEADER_SIZE 28
 #define	WT_RECNO_OOB	0
 
-#pragma pack(push, 1)
 typedef struct wt_page_header {
 	uint64_t recno;
 	uint64_t write_gen;
@@ -32,32 +29,27 @@ typedef struct wt_page_header {
 	uint8_t flags;
 	uint8_t unused[2];
 } wt_page_header_t;
-#pragma pack(pop)
 
 /* WT Block Header */
 
 #define WT_BLOCK_HEADER_SIZE 12
 
-#pragma pack(push, 1)
 typedef struct wt_block_header {
 	uint32_t disk_size;
 	uint32_t checksum;
 	uint8_t flags;
 	uint8_t unused[3];
 } wt_block_header_t;
-#pragma pack(pop)
 
 /* WT Page */
 
 #define WT_PAGE_SIZE    4096
 
-#pragma pack(push, 1)
 typedef struct wt_page {
 	int offset;
 	wt_page_header_t *page_header;
 	wt_block_header_t *block_header;
 	uint8_t *entries;
 } wt_page_t;
-#pragma pack(pop)
 
 #endif // WT_TYPES_H_
