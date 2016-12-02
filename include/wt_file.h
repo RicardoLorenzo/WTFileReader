@@ -27,9 +27,20 @@ struct wt_file_reader {
 	int c_offset;		/* WT reader current offset */
 };
 
+class WTBlockReader {
+private:
+	struct wt_file_reader *wt_r;
+
+public:
+	WTBlockReader(struct wt_file_reader *reader);
+	~WTBlockReader();
+  uint8_t* readBlock(int offset, int size);
+};
+
 class WTFileReader {
 private:
 	struct wt_file_reader *wt_r;
+	WTBlockReader *wt_b;
   int n_read, s_offset, bh_offset;
   wt_page_t page;
   wt_page_header_t page_header;
@@ -43,12 +54,16 @@ public:
 	~WTFileReader();
   int seek(int offset, wt_reader_seek_from_t from_pos);
   int readBlockDesc();
-  int readPage(wt_page_t *page);
+  int readHeaders(wt_page_t *page);
+	void readEntries(wt_page_t *page);
 };
 
 class WTFile {
 private:
   WTFileReader *file_reader;
+	wt_page_t *page;
+  wt_page_header_t *page_header;
+  wt_block_header_t *block_header;
 
 public:
 	WTFile(const char* filename);

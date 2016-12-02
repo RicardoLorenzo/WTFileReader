@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstdlib>
-#include <iostream>
 
 #include "include/wt_file.h"
 
@@ -16,6 +15,7 @@ WTFileReader::WTFileReader(const char* filename) {
   assert(wt_r->f_block_desc != NULL);
 
   mapFile();
+  wt_b = new WTBlockReader(wt_r);
 };
 
 WTFileReader::~WTFileReader() {
@@ -78,10 +78,10 @@ int WTFileReader::readBlockDesc() {
   return WT_PAGE_SIZE;
 }
 
-int WTFileReader::readPage(wt_page_t *page) {
-	int bh_offset, p_offset;
+int WTFileReader::readHeaders(wt_page_t *page) {
+  int p_offset;
 
-  if (wt_r->c_offset >= wt_r->f_size)
+	if (wt_r->c_offset >= wt_r->f_size)
 		return WT_EOF;
 
   page->offset = wt_r->c_offset;
@@ -91,15 +91,22 @@ int WTFileReader::readPage(wt_page_t *page) {
 	 */
   memcpy(page->page_header, (static_cast<uint8_t*>(wt_r->map) + wt_r->c_offset),
 	       WT_PAGE_HEADER_SIZE);
-  bh_offset = wt_r->c_offset + WT_PAGE_HEADER_SIZE;
-	memcpy(page->block_header, (static_cast<uint8_t*>(wt_r->map) + bh_offset),
-	       WT_BLOCK_HEADER_SIZE);
+  memcpy(page->block_header, (static_cast<uint8_t*>(wt_r->map) +
+    (wt_r->c_offset + WT_PAGE_HEADER_SIZE)), WT_BLOCK_HEADER_SIZE);
 
   if (page->page_header->recno == WT_RECNO_OOB)
 		p_offset = page->block_header->disk_size;
 	else
 		p_offset = WT_PAGE_SIZE;
 
-	wt_r->c_offset += p_offset;
-	return p_offset;
+  wt_r->c_offset += p_offset;
+  return p_offset;
+}
+
+void WTFileReader::readEntries(wt_page_t *page) {
+	int b_offset = page->offset + WT_PAGE_HEADER_SIZE + WT_BLOCK_HEADER_SIZE;
+
+  if (page->page_header->type == 7) {
+    uint8_t *data = wt_b->readBlock(b_offset, page->block_header->disk_size);
+	}
 }
