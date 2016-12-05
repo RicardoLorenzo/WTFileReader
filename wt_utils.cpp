@@ -1,6 +1,6 @@
 #include "include/wt_utils.h"
 
-int unpackUInt(const uint8_t **data, uint64_t *upck) {
+int WTUtils::unpackUInt(const uint8_t **data, uint64_t *upck) {
   const uint8_t *p_data;
 
   p_data = *data;

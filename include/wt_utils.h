@@ -10,7 +10,11 @@
 #define POS_1BYTE_MAX ((1 << 6) - 1)
 #define POS_2BYTE_MAX ((1 << 13) + POS_1BYTE_MAX)
 
-
 int unpackUInt(const uint8_t **p_data, uint64_t *xp);
+
+class WTUtils {
+public:
+	static int unpackUInt(const uint8_t **data, uint64_t *upck);
+};
 
 #endif      // WT_UTILS_H_

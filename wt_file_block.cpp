@@ -11,6 +11,8 @@ WTBlockReader::WTBlockReader(struct wt_file_reader *reader) {
 };
 
 int WTBlockReader::readCell(wt_cell_unpack_t *unpack_c, int offset) {
+  WTUtils utils;
+
   /* Get start of the cell from the mapped memory region */
   uint8_t* cell = static_cast<uint8_t *>(wt_r->map) + offset;
 
@@ -56,7 +58,7 @@ int WTBlockReader::readCell(wt_cell_unpack_t *unpack_c, int offset) {
     case WT_CELL_KEY:
     case WT_CELL_KEY_PFX:
     case WT_CELL_VALUE:
-      unpackUInt(&cell_data, &sz);
+      utils.unpackUInt(&cell_data, &sz);
       if (unpack_c->desc == WT_CELL_KEY ||
           unpack_c->desc == WT_CELL_KEY_PFX ||
           (unpack_c->desc == WT_CELL_VALUE && !(unpack_c->desc & WT_CELL_64V)))
