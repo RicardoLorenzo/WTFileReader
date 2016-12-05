@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <assert.h>
 #include <errno.h>
+#include <vector>
 
 #include "wt_types.h"
 
@@ -34,7 +35,7 @@ private:
 public:
 	WTBlockReader(struct wt_file_reader *reader);
 	~WTBlockReader();
-  uint8_t* readBlock(int offset, int size);
+  int readCell(wt_cell_unpack_t *unpack_c, int offset);
 };
 
 class WTFileReader {
@@ -55,7 +56,7 @@ public:
   int seek(int offset, wt_reader_seek_from_t from_pos);
   int readBlockDesc();
   int readHeaders(wt_page_t *page);
-	void readEntries(wt_page_t *page);
+	void readEntries(wt_page_t *page, wt_cell_unpack_t *entries);
 };
 
 class WTFile {
@@ -68,5 +69,5 @@ private:
 public:
 	WTFile(const char* filename);
   void parse();
-  void printPage(wt_page_t *page);
+  void printPage(wt_page_t *page, wt_cell_unpack_t *entries);
 };

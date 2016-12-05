@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstdlib>
+#include <iostream>
 
 #include "include/wt_file.h"
 
@@ -103,10 +104,14 @@ int WTFileReader::readHeaders(wt_page_t *page) {
   return p_offset;
 }
 
-void WTFileReader::readEntries(wt_page_t *page) {
-	int b_offset = page->offset + WT_PAGE_HEADER_SIZE + WT_BLOCK_HEADER_SIZE;
+void WTFileReader::readEntries(wt_page_t *page, wt_cell_unpack_t *entries) {
+  int offset = page->offset + WT_PAGE_HEADER_SIZE + WT_BLOCK_HEADER_SIZE;
 
-  if (page->page_header->type == 7) {
-    uint8_t *data = wt_b->readBlock(b_offset, page->block_header->disk_size);
-	}
+  if (page->page_header->type == WT_PAGE_ROW_LEAF) {
+      for (int i=0; i < page->page_header->entries; i++) {
+        wt_cell_unpack_t cell;
+        offset += wt_b->readCell(&cell, offset);
+        entries[i] = cell;
+      }
+  }
 }
