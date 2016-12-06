@@ -14,5 +14,8 @@ wtfile: clean
 
 .PHONY: clean
 
+format:
+	clang-format -style=file -i *.cpp include/*.h
+
 clean:
 	rm -f *.o wtfile
