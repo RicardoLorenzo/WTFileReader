@@ -1,0 +1,9 @@
+build/
+
+
+*~
+*.swp
+.DS_Store
+._.DS_Store
+*.out
+*.tmp
